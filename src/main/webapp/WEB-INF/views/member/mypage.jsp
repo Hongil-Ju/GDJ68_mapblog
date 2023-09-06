@@ -39,8 +39,16 @@
         		전체 비공개
        		</c:if>
 		</p>
-		<p>
+		
+		<c:if test="${not empty sessionScope.memberFile}">
 			<img alt="" src="../resources/upload/member/${memberFile.fileName}">
+		</c:if>
+		<c:if test="${empty sessionScope.memberFile}">
+			<img alt="" src="../resources/img/기본프사.png">
+		</c:if>
+		
+		<p>
+			
 		</p>
 	
 		

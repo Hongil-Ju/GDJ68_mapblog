@@ -25,16 +25,19 @@ public class MemberService {
 	
 	public int setJoin(MemberDTO memberDTO, MultipartFile photo, HttpSession session) throws Exception{
 		
-		String path="/resources/upload/member/";
+		
 		int result = memberDAO.setJoin(memberDTO);
 		
-		String fileName = fileManager.fileSave(path, session, photo);
-		MemberFileDTO memberFileDTO = new MemberFileDTO();
-		memberFileDTO.setOriginalName(photo.getOriginalFilename());
-		memberFileDTO.setFileName(fileName);
-		memberFileDTO.setId(memberDTO.getId());
-		result = memberDAO.setFileAdd(memberFileDTO);
-		
+		if(photo.getSize() != 0) {
+			String path="/resources/upload/member/";
+			String fileName = fileManager.fileSave(path, session, photo);
+			MemberFileDTO memberFileDTO = new MemberFileDTO();
+			memberFileDTO.setOriginalName(photo.getOriginalFilename());
+			memberFileDTO.setFileName(fileName);
+			memberFileDTO.setId(memberDTO.getId());
+			result = memberDAO.setFileAdd(memberFileDTO);
+		}
+
 		return result;
 	}
 
@@ -64,21 +67,45 @@ public class MemberService {
 
 	public MemberFileDTO setUpdateImg(MultipartFile photo, MemberFileDTO memberFileDTO, FileDTO fileDTO, HttpSession session) throws Exception {
 		String path="/resources/upload/member/";
+		
+		// 실제 사진 파일 삭제
 		boolean deleteResult = fileManager.fileDelete(fileDTO, path, session);
 		
-		if(deleteResult){
-			memberDAO.deleteMemberFile(fileDTO);
-			// 여기 까지 ok
+		if(deleteResult) {
+			System.out.println("기존 사진 삭제");
 			
+			// DBMS에서 파일 관련 데이터 삭제
+			memberDAO.deleteMemberFile(fileDTO);
+			
+			// 새로운 사진 추가
 			String fileName = fileManager.fileSave(path, session, photo);
+			
+			// 새로운 사진 관련 정보를 DBMS에 저장
 			MemberFileDTO memberFileDTO2 = new MemberFileDTO();
 			memberFileDTO2.setOriginalName(photo.getOriginalFilename());
 			memberFileDTO2.setFileName(fileName);
 			memberFileDTO2.setId(memberFileDTO.getId());
 			int result = memberDAO.setFileAdd(memberFileDTO2);
 			return memberFileDTO2;
+		}else {
+			System.out.println("기존 사진이 없으므로 insert만 수행");
+			
+			
+			// 새로운 사진 추가
+			String fileName = fileManager.fileSave(path, session, photo);
+			
+			// 새로운 사진 관련 정보를 DBMS에 저장		
+			MemberDTO m = (MemberDTO)session.getAttribute("member");
+			String userId = m.getId();
+			
+			MemberFileDTO memberFileDTO2 = new MemberFileDTO();
+			memberFileDTO2.setOriginalName(photo.getOriginalFilename());
+			memberFileDTO2.setFileName(fileName);
+			memberFileDTO2.setId(userId);
+			int result = memberDAO.setFileAdd(memberFileDTO2);
+			
+			return memberFileDTO2;
 		}
-		return null;
 	}
 
 	public MemberDTO getNickNameCheck(MemberDTO memberDTO) {

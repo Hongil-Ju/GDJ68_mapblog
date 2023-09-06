@@ -73,6 +73,12 @@ public class MemberController {
 		}
 		if(memberFileDTO != null) {
 			session.setAttribute("memberFile", memberFileDTO);
+			System.out.println(memberFileDTO.getId());
+			System.out.println(memberFileDTO.getFileName());
+			System.out.println(memberFileDTO.getOriginalName());
+			System.out.println(memberFileDTO.getFileNum());
+		}else {
+			System.out.println("z123");
 		}
 		
 		String userUrl = memberDTO.getUrl();
