@@ -12,9 +12,11 @@
 <body>
 
 	<input type="text" id="adrs"><button id="btn2" type="button">검색</button>
+	<button id="myListBtn" type="button">내 참석 모임 보기</button>
 	<c:forEach items="${list}" var="d" varStatus="i">
 	<div class="a" data-meetingNum="${d.meetingNum}" data-contents="${d.contents}" data-title="${d.title}" data-lat="${d.lat }" data-lng="${d.lng }" id="${i.index}"></div>
 	</c:forEach>
+	<div id="myList"></div>
 	<div id="map" style="width:900px;height:700px;float:left;border: solid 1px;margin-right: 300px;"></div>
 	<div id="detail" style="float:left;text-align:center;"></div>
 
