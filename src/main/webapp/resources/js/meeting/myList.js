@@ -65,7 +65,7 @@ let checked = true;
 
 // let imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 let imageSrc = "../resources/img/marker2.png";    
-$('.b').each((i,e)=>{
+$('.a').each((i,e)=>{
     
     // 마커 이미지의 이미지 크기 입니다
     let imageSize = new kakao.maps.Size(42, 53); 

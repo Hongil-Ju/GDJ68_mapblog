@@ -19,12 +19,11 @@ function getLocation() {
         console.log(centertLat);
         centerLng = position.coords.longitude;
         console.log(centerLng);
-        getKakaoMap(centertLat,centerLng);
+        getKakaoMap(centertLat,centerLng)
       }, function(error) {
         console.error(error);
         alert('GPS 지원을 동의하지 않으셨습니다.')
         getKakaoMap(centertLat,centerLng);
-        
       }, {
         enableHighAccuracy: false,
         maximumAge: 0,
